@@ -1,3 +1,4 @@
+import CreatePokemonForm from '../components/CreatePokemonForm';
 import { LOAD_ITEMS, REMOVE_ITEM, ADD_ITEM } from './items';
 
 const LOAD = 'pokemon/LOAD';
@@ -28,6 +29,17 @@ export const getPokemon = () => async dispatch => {
   }
 };
 
+export const getOnePokemon = (id) => async dispatch => {
+  // console.log(id)
+  const response = await fetch (`/api/pokemon/${id}`)
+
+  if(response.ok) {
+    const pokemon = await response.json();
+    console.log(pokemon)
+    dispatch(addOnePokemon(pokemon))
+  }
+}
+
 export const getPokemonTypes = () => async dispatch => {
   const response = await fetch(`/api/pokemon/types`);
 
@@ -36,6 +48,21 @@ export const getPokemonTypes = () => async dispatch => {
     dispatch(loadTypes(types));
   }
 };
+
+export const createPokemon = (pokemon) => async dispatch => {
+  console.log(pokemon)
+  
+  const response = await fetch('/api/pokemon',{
+    method: 'POST',
+    headers: { "Content-Type": 'application/json' },
+    body: JSON.stringify(pokemon)
+  })
+  console.log(response)
+  if(response.ok) {
+    const pokemon = await response.json();
+    dispatch(addOnePokemon(pokemon))
+  }
+}
 
 const initialState = {
   list: [],
